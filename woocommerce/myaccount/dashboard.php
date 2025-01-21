@@ -39,7 +39,11 @@ $allowed_html = array(
 	?>
 </p>
 
-<p>
+
+<p>Welcome to your account dashboard! Here you can manage your account and preferences.</p>
+<a class="common-btn" href="<?php echo site_url('/shop/');?>">Go to Shop Page</a>
+
+<!-- <p>
 	<?php
 	/* translators: 1: Orders URL 2: Address URL 3: Account URL. */
 	$dashboard_desc = __( 'From your account dashboard you can view your <a href="%1$s">recent orders</a>, manage your <a href="%2$s">billing address</a>, and <a href="%3$s">edit your password and account details</a>.', 'woocommerce' );
@@ -54,7 +58,7 @@ $allowed_html = array(
 		esc_url( wc_get_endpoint_url( 'edit-account' ) )
 	);
 	?>
-</p>
+</p> -->
 
 <?php
 	/**
