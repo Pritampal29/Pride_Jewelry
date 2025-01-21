@@ -277,6 +277,8 @@ if ( defined( 'JETPACK__VERSION' ) ) {
 	remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_meta', 40);
 	remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_rating', 10);
 	remove_action( 'woocommerce_after_single_product_summary', 'woocommerce_output_product_data_tabs', 10);
+	remove_action('woocommerce_single_product_summary', 'woocommerce_template_single_excerpt', 20);
+	// remove_action( 'woocommerce_after_shop_loop', 'woocommerce_pagination', 10);
 	
 
 
@@ -361,22 +363,6 @@ if ( defined( 'JETPACK__VERSION' ) ) {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	/**
 	 * Add extra fields to the user profile page in User Menu Dashboard
 	 * 
@@ -456,7 +442,7 @@ function send_admin_email_on_registration( $user_id ) {
     $admin_email = get_option( 'admin_email' );
     $subject = 'New User Registration (Pride Jewelry)';
     $message = 'A new user has registered on your site. Please Approve from Backend(Approve New Users) to Give Access to your site' . "\n";
-    $message .= 'Or Click the Link: https://dev.sisproj.com/dev/pride_jewllery/wp-admin/admin.php?page=new-user-approve-admin' . "\n\n";
+    $message .= 'Or Click the Link: https://pridejewelry.com/wp-admin/admin.php?page=new-user-approve-admin' . "\n\n";
     $message .= 'Username: ' . $user_info->user_login . "\n";
     $message .= 'Email: ' . $user_info->user_email . "\n";
     $message .= 'First Name: ' . get_user_meta( $user_id, 'first_name', true ) . "\n";
@@ -486,3 +472,7 @@ function send_user_email_on_approval( $user_id ) {
     wp_mail( $user_info->user_email, $subject, $message );
 }
 add_action( 'new_user_approve_approve_user', 'send_user_email_on_approval' );
+
+
+
+

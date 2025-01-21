@@ -1,7 +1,4 @@
 <?php
-
-
-
   /**
     *
     * <!--==========================================================-->
@@ -12,76 +9,41 @@
     *
     */
 
-
-
-
-
-
-
     /**
-
     * Woo-Commerce Default Sorting Option Customization
-
     *
-
     */
 
 
-
     /**
-
     * For Remove Sorting Options from Select Box:
-
     */
 
     function fa_remove_default_sorting_options( $options ) {
 
-
-
     unset( $options[ 'popularity' ] );
-
     unset( $options[ 'menu_order' ] );
-
     unset( $options[ 'rating' ] );
-
     // unset( $options[ 'date' ] );
-
     // unset( $options[ 'price' ] );
-
     // unset( $options[ 'price-desc' ] );
 
-
-
     return $options;
-
     }
-
     add_filter( 'woocommerce_catalog_orderby', 'fa_remove_default_sorting_options' );
 
-
-
     /**
-
     * For Rename Sorting Options name in Select Box:
-
     */
 
     function fa_rename_default_sorting_options( $options ) {
 
-
-
     // $options[ 'menu_order' ] = 'Default Sorting';
-
     $options[ 'date' ] = 'Newest';
-
     $options[ 'price' ] = 'Price Low to High';
-
     $options[ 'price-desc' ] = 'Price High to Low';
 
-
-
     return $options;
-
     }
 
     add_filter( 'woocommerce_catalog_orderby', 'fa_rename_default_sorting_options' );
@@ -154,21 +116,13 @@
     if(!is_product()){
 
     echo '<section class="banner-area inner-ban">';
-
         }
-
         }
-
         add_action("woocommerce_before_main_content", "shop_woocommerce_output_content_wrapper", 10);
 
 
-
-
-
         function shop_woocommerce_output_content_wrapper_end(){
-
         echo '</section>';
-
     }
 
     add_action("woocommerce_archive_description", "shop_woocommerce_output_content_wrapper_end", 10);
@@ -340,7 +294,7 @@
 	 */
 
 	function custom_shop_per_page( $cols ) {
-		$cols = 20; 
+		$cols = 100; 
 		return $cols;
 	}
 
@@ -392,3 +346,71 @@
 	add_action('wp', 'hide_add_to_cart_for_all');
 
 	
+
+/**
+ * Hide Some Tabs from my account page
+ */
+	add_filter( 'woocommerce_account_menu_items', 'custom_remove_my_account_tabs', 999 );
+	function custom_remove_my_account_tabs( $menu_links ) {
+		
+		unset( $menu_links['orders'] );
+		unset( $menu_links['downloads'] );
+	
+		return $menu_links;
+	}
+
+
+
+/**
+ * Redirect users to the Shop page after login.
+ *
+ * @param string $redirect_to The URL to redirect to.
+ * @param object $user The user object.
+ * @return string The redirect URL.
+ */
+function custom_login_redirect( $redirect_to, $user ) {
+    $shop_page_url = get_permalink( wc_get_page_id( 'shop' ) );
+
+    return $shop_page_url;
+}
+add_filter( 'woocommerce_login_redirect', 'custom_login_redirect', 10, 2 );
+
+
+/**
+ * Redirect users to the Shop page after logout.
+ */
+function custom_logout_redirect_to_shop() {
+    $shop_page_url = get_permalink( wc_get_page_id( 'shop' ) );
+    wp_redirect( $shop_page_url );
+    exit;
+}
+add_action( 'wp_logout', 'custom_logout_redirect_to_shop' );
+
+
+/**
+ * Add Custom Myaccount & Logout Button on Header Nav Menu
+ */
+
+add_filter('wp_nav_menu_items', 'add_logout_to_my_account_menu', 10, 2);
+
+function add_logout_to_my_account_menu($items, $args) {
+    $my_account_url = get_permalink(get_option('woocommerce_myaccount_page_id'));
+
+    $my_account_menu = '
+        <li class="account_mnu menu-item menu-item-has-children">
+            <a href="' . esc_url($my_account_url) . '"><i class="fa-solid fa-user"></i></a>
+            <ul class="sub-menu">';
+
+    if (is_user_logged_in()) {
+        $logout_url = wc_logout_url();
+        $my_account_menu .= '<li class="menu-item"><a href="' . esc_url($logout_url) . '">Logout</a></li>';
+    }
+
+    $my_account_menu .= '</ul></li>';
+
+    $items .= $my_account_menu;
+
+    return $items;
+}
+
+
